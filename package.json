@@ -1,0 +1,42 @@
+{
+  "name": "agent007",
+  "description": "NodeJS User-Agent retriever, big directory of user-agent.",
+  "version": "0.0.1",
+  "author": {
+    "name": "Julien Valéry",
+    "email": "darul75@gmail.com"
+  },
+  "homepage": "https://github.com/darul75/agent007",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darul75/agent007.git"
+  },  
+  "keywords": [
+    "user-agent",
+    "browser",
+    "http",
+    "nodejs"
+  ],
+  "main": "./lib/agent007",
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "engines": {
+    "node": ">=0.6.x"
+  },  
+  "dependencies": {
+    "node-index": "0.0.2",
+    "xml2js": "0.4.1"
+  },
+  "devDependencies": {   
+    "mocha": "",
+    "grunt": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-uglify": "latest"
+  },
+  "bugs": {
+    "url": "https://github.com/darul75/agent007/issues"
+  },
+  "readmeFilename": "README.md",
+  "license": "MIT"
+}
