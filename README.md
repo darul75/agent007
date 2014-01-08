@@ -5,6 +5,7 @@ Agent-007 NodeJS module to find all User-Agent you never expected before, nice f
 
 It uses a small index so you can make natural query for your favorite devices `AppleWebKit` `Firefox` `Chrome`... when searching.
 
+More than 1000 user-agents today, do not hesitate send me more.
 
 Demo
 ------------
