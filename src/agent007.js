@@ -48,32 +48,62 @@ Agent007.prototype.init = function() {
           _this.indexUserAgent = new Index();
           _this.indexCategory = new Index();
           nodeIt.apply(_this, [result.useragentswitcher.folder, node, true]);
-
-          var types = _this.getTypes();
-          for (var i=0;i<types.length;i++) {
-            console.log('\n------------------------------\n'+types[i]+ '\n------------------------------\n');
-            var result = _this.queryType(types[i]);
-            for (var j=0;j<result.length;j++) {
-              console.log(useragents[result[j].key]);
-            }
-          }
+          
       });
   });
 
   return this;
 };
 
-Agent007.prototype.queryAgent = function(agent) {
-  return this.indexUserAgent.query(agent);
+Agent007.prototype.findAgents = function(query) {
+  var agents = [];
+  var r = this.indexUserAgent.query(query);
+  
+  if (!r || r.length === 0) return agents;
+
+  for (var i=0;i<r.length;i++)
+    agents.push(useragents[r[i].key]);
+
+  return agents;
 };
 
-Agent007.prototype.queryType = function(type) { 
+Agent007.prototype.findRandomAgent = function(query) {
+  var r = this.indexUserAgent.query(query);
+  
+  if (!r || r.length === 0) return '';
+
+  var idx = Math.floor((Math.random()*r.length-1)+1);
+  return useragents[r[idx].key];
+};
+
+Agent007.prototype.findAgentsByType = function(type) { 
+  var agents = [];
+  type = type.replace(/\//g, '');  
+  var r = this.indexCategory.query(type);
+
+  if (!r || r.length === 0) return agents;  
+
+  for (var i=0;i<r.length;i++)
+    agents.push(useragents[r[i].key]);
+  return agents;
+};
+
+Agent007.prototype.findRandomAgentByType = function(type) { 
   type = type.replace(/\//g, '');
-  return this.indexCategory.query(type);
+  var r = this.indexCategory.query(type);
+
+  if (!r || r.length === 0) return '';
+
+  var idx = Math.floor((Math.random()*r.length-1)+1);
+  return useragents[r[idx].key];
 };
 
 Agent007.prototype.getTypes = function() {
   return types;
+};
+
+Agent007.prototype.getTree = function() {
+  return node;
 };
 
 var nodeIt = function(folders, node, root) {  
@@ -142,5 +172,5 @@ var fetchUserAgents = function(ua, o) {
 /**
 * Export default singleton.
 */
-var agent007 = new Agent007();
-module.exports = agent007;
+var agent = new Agent007();
+module.exports = agent;
