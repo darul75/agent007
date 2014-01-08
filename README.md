@@ -16,7 +16,7 @@ Installation
 Using npm:
 
 ```
-npm install agent-007
+npm install agent007
 ```
 
 Usage
