@@ -24,10 +24,12 @@ var Browsers = 'Browsers';
 var Devices = 'Devices';
 var Tablets = 'Tablets';
 var TabletsApple = 'AppleiPhoneetc';
+var AmazonKindle = 'AmazonKindle';
 var OS = 'OS';
 
 var key = 0;
 
+var types = [];
 var useragents = [];
 var node = [];
 
@@ -42,53 +44,19 @@ Agent007.prototype.init = function() {
 
   // http://techpatterns.com/downloads/firefox/useragentswitcher.xml
   fs.readFile(xml, function(err, data) {
-      parser.parseString(data, function (err, result) {
-          
-          _this.index = new Index();
-          _this.index2 = new Index();
-          _this.nodeIt(result.useragentswitcher.folder, node, true);
+      parser.parseString(data, function (err, result) {          
+          _this.indexUserAgent = new Index();
+          _this.indexCategory = new Index();
+          nodeIt.apply(_this, [result.useragentswitcher.folder, node, true]);
 
-          var results;
-
-          console.log("-------- mac legacy browsers -----------");
-          results = _this.query(Steve + LegacyBrowsers);
-        
-          for (var i=0;i<results.length;i++) {
-            console.log(useragents[results[i].key]);
+          var types = _this.getTypes();
+          for (var i=0;i<types.length;i++) {
+            console.log('\n------------------------------\n'+types[i]+ '\n------------------------------\n');
+            var result = _this.queryType(types[i]);
+            for (var j=0;j<result.length;j++) {
+              console.log(useragents[result[j].key]);
+            }
           }
-
-          console.log("\n-------- Mac -----------\n");
-          results = _this.query(Steve);
-
-          for (var i=0;i<results.length;i++) {
-            console.log(useragents[results[i].key]);
-          }
-
-          console.log("\n-------- Mobile -----------\n");
-          results = _this.query(Mobile+Browsers);
-
-          for (var i=0;i<results.length;i++) {
-            console.log(useragents[results[i].key]);
-          }
-
-          console.log("\n-------- Mobile/Tablets -----------\n");
-          results = _this.query(Mobile+Devices+Tablets);
-
-          for (var i=0;i<results.length;i++) {
-            console.log(useragents[results[i].key]);
-          }
-
-          console.log("\n-------- Mobile/Tablets/Apple -----------\n");
-          results = _this.query(Mobile+Devices+TabletsApple);
-
-          for (var i=0;i<results.length;i++) {
-            console.log(useragents[results[i].key]);
-          }
-
-          
-
-          console.log("loaded");
-
       });
   });
 
@@ -96,64 +64,71 @@ Agent007.prototype.init = function() {
 };
 
 Agent007.prototype.queryAgent = function(agent) {
-  return this.index.query(type);
+  return this.indexUserAgent.query(agent);
 };
 
-Agent007.prototype.queryPath = function(type) {  
-  return this.index2.query(type);
+Agent007.prototype.queryType = function(type) { 
+  type = type.replace(/\//g, '');
+  return this.indexCategory.query(type);
 };
 
-Agent007.prototype.nodeIt = function(folders, node, root) {  
+Agent007.prototype.getTypes = function() {
+  return types;
+};
+
+var nodeIt = function(folders, node, root) {  
   node.children = [];
   if (!folders)
     return;
   for (var i=0;i<folders.length;i++) {
     var folder = folders[i];
-    var description = folder.$.description.replace('Browsers - ', '').replace(' ', '').replace(')', ' ').replace('(', '');
-    if (description)
+    var desc = folder.$.description.replace(/[\(\)\/\- ]|Browsers - /g, '');
+    
+    if (desc)
     {
-      var o = {name: description};
-      o.path = node.path ? node.path + '/' + description : description;
-      var compactDesc = description.replace(' ', '');
-      o.index = node.index ? node.index + compactDesc : compactDesc;
+      var o = {name: desc};
+      o.path = node.path ? node.path + '/' + desc : desc;      
+      o.index = node.index ? node.index + desc : desc;      
 
-      this.fetchUserAgents(folder.useragent, o);
+      types.push(o.path);
 
-      if (root) {
+      fetchUserAgents.apply(this, [folder.useragent, o]);
+
+      if (root)
         node.push(o);
-        this.nodeIt(folder.folder, o, false);
-      }              
-      else {        
+      else
         node.children.push(o);
-        this.nodeIt(folder.folder, o, false);
-      }
+
+      nodeIt.apply(this, [folder.folder, o, false]);
     }
   }
 
   return this;
 };
 
-Agent007.prototype.fetchUserAgents = function(ua, o) {
+var fetchUserAgents = function(ua, o) {
   if (!ua)
     return;
 
   o.useragent = [];
+
   for (var i=0;i<ua.length;i++) {
     var u = ua[i];
     var desc = u.$.description;
     var useragent = u.$.useragent;
+
     o.useragent.push({
       description: desc,
       value: useragent,
-      path: o.path      
+      path: o.path
     });
 
-    this.index.addDocument(key, {      
+    this.indexUserAgent.addDocument(key, {
       userAgent: useragent
     });
 
-    this.index2.addDocument(key, {
-      path: o.index      
+    this.indexCategory.addDocument(key, {
+      path: o.index
     });
 
     useragents[key] = useragent;
