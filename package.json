@@ -1,7 +1,7 @@
 {
   "name": "agent007",
   "description": "NodeJS User-Agent retriever, big directory of user-agent.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "Julien Valéry",
     "email": "darul75@gmail.com"
