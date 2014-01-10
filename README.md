@@ -9,7 +9,7 @@ More than 1000 user-agents today, do not hesitate send me more.
 
 Demo
 ------------
-Coming soon
+http://darul-demo.herokuapp.com/useragent
 
 Installation
 ------------
