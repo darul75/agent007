@@ -1,4 +1,4 @@
-Agent-007 [![NPM version](https://badge.fury.io/js/agent007.png)](http://badge.fury.io/js/agent007) [![Build Status](https://travis-ci.org/darul75/agent007.png?branch=master)](https://travis-ci.org/darul75/agent007) [![Total views](https://sourcegraph.com/api/repos/github.com/darul75/agent007/counters/views.png)](https://sourcegraph.com/github.com/darul75/agent007)
+Agent-007 [![NPM version](https://badge.fury.io/js/agent007.png)](http://badge.fury.io/js/agent007) [![Build Status](https://travis-ci.org/darul75/agent007.png?branch=master)](https://travis-ci.org/darul75/agent007) [![Total views](https://sourcegraph.com/api/repos/github.com/darul75/agent007/counters/views.png)](https://sourcegraph.com/github.com/darul75/agent007) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/darul75/agent007/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 =====================
 
 Agent-007 NodeJS module to find all User-Agent you never expected before, nice for testing.
